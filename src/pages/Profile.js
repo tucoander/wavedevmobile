@@ -9,4 +9,4 @@ import { View } from 'react-native';
   );
 }
 
-export default Main;
+export default Profile;

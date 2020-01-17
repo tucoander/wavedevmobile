@@ -1,9 +1,9 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 // import { Container } from './styles';
 
- function Profile() {
+ function Main() {
   return (
     <View />
   );
