@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
+
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
+
 import { MaterialIcons } from '@expo/vector-icons';
+
 import api from '../services/api';
-import { connect, disconnect } from '../services/socket';
+import { connect, disconnect, subscribeToNewDevs } from '../services/socket';
 // import { Container } from './styles';
 
 function Main({ navigation }) {
@@ -35,8 +39,19 @@ function Main({ navigation }) {
         loadInitialPosition();
     }, []);
 
+    useEffect(() => {
+        subscribeToNewDevs( dev => setDevs([...devs, dev]));
+    }, [devs]);
+
     function setupWebSocket(){
-        connect();
+        disconnect();
+        const { latitude, longitude } = currentRegion;
+
+        connect(
+            latitude,
+            longitude,
+            techs,
+        );
     }
 
     async function loadDevs() {
