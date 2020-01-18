@@ -4,6 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { requestPermissionsAsync, getCurrentPositionAsync } from 'expo-location';
 import { MaterialIcons } from '@expo/vector-icons';
 import api from '../services/api';
+import { connect, disconnect } from '../services/socket';
 // import { Container } from './styles';
 
 function Main({ navigation }) {
@@ -34,6 +35,10 @@ function Main({ navigation }) {
         loadInitialPosition();
     }, []);
 
+    function setupWebSocket(){
+        connect();
+    }
+
     async function loadDevs() {
         const { latitude, longitude } = currentRegion;
         const response = await api.get('/search', {
@@ -43,8 +48,9 @@ function Main({ navigation }) {
                 techs,
             }
         });
-
+        //refresh
         setDevs(response.data.devs);
+        setupWebSocket();
     }
 
     function handleRegionChanged(region) {
